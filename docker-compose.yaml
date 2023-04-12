@@ -25,6 +25,10 @@ services:
     volumes:
       - workshop-db-data:/var/lib/mysql
 
+  frontend:
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
 volumes:
   workshop-db-data: 
 

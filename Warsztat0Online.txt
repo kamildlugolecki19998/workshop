@@ -1,0 +1,126 @@
+Aplikacja Warsztat Online 
+
+Warsztat moze dodac naprawe do danego auta postawic diagne opisac co obejmowała diagnoza najpier klient podaje lub i wpisuje online
+
+sprawdz
+	
+	
+	
+objawy. potem jest diagnoza w dodanie jej 
+nastepnie naprawa i jej zakres czesci uzyte/ moze wygenerowanie faktury warsztatu 
+podsumowanie 
+dane per auto 
+gdzie auto moze dodac user do bazy albo warsztat auto ma vin wiec jest jedno dla systemu 
+user sam moze doknac naprawy sowjego auta/ dodajac opis czynnosci i zdj czesci 
+
+
+moze tagowanie czynnosci np wymiana oleju 
+zeby szybciej było wypełniac 
+dodawanie przez mechanika napraw (typow)
+kategorie i pod kategowie np silink układ paliwowy (co obejmuje np sprawdzenie wtrysków) diagnostyka komupterowa  itd 
+
+wyszukanie napraw dla danego samochodu po vin tylko przez właściciela i warsztat
+potem dodanie sprawdzzenia histori napraw 
+generowanie raportu histori napraw 
+
+
+role
+moduł warsztatu  JAK ROZWIAC temat z pracownikami warsztatu moze dodac dla warszatu pracownika i kazdemu profil dzieki czemu bedzie rozenznaie kto robił 
+
+moduł klienta logowanie, dodanie samochodu zapisanei sie do warszatu, naprawa na własną rekę
+
+
+nowa naprawa 
+
+
+log 
+
+
+skode nierówna praca 
+diagonoza spradzie 
+układad paliwowy
+	spradzi (dobrze) leje dasd
+	diagonad komupterowa (błedy)
+	sprzeaw ekawe
+	ds'fsfdsfs
+wymiana wstaw 
+wymiaa sam 
+
+
+
+tabela samochody - warszat i klient 
+	id
+	vin
+	marka
+	rok
+	silnik
+	nadowzie (enum)
+	wlasciel nulable -> user warszat potwierdza pod wzgledem dowodu
+	dowód auta (zdj)
+	
+Moje auta 
+	sprzedej pod dane klienta
+	nie
+	
+	
+Warszat rejestruje sie przez formlarz na stronie 
+
+
+
+Zamysł aplikacji
+Historia napraw warsztatowych 
+Warszat naprawia auto stawiajać diagnozę dla konkretnego auta
+Warszat dokumentuje(opisuje zdj) przebieg napraw
+Klient ma podgląd histori napraw auta
+
+Dodanie auta do systemu z poziomu warszatu lub Klient'a (weryfikacja wlasciciela odbywa sie po stronie warszatu (sprawdza dowód pojazu i dane)
+ przypadek: warszat dodje auto do systemu 
+	Dodaje dane auta i właściciela jesli istnieje w systemie lub null (gdy dodaje wlasciciela (akceptuje disclaimer prawa itd) 
+ przypadek: klient dodaje(własne) auto do systemu
+	Doaje dane auta i z automatu jest jego właścicilem (akceptuje disclaimer prawa itd)
+
+Przebieg naprawy auta:
+	Warsztat w trkacie rozowy z klientem określa objawy oraz zakres diagnozy(jako opis)
+	Warszat dokonuje weryfikuje stan pojazdu(praca) dodaje w systemie rezultat badania co zostało sprawdzone i co trzeba zrobic(potencjalny zakres napraw zakres naprawy)
+	Klient moze to podejrzez ale warsztat moze to potwierdzic telefonicznie (nie wymaga systemu)
+	Warszatat dodaje zakres wykoananych napraw (zdjecia(napraw częsci) i opis)
+	Mozliwosc wygenerowania podsumowania naprawy (opcjonalne zalaczenie zdjec do wygenerowaniego pliku PDF)
+	
+Klient moze dokonac oceny warszatu 1-5 gwiazdek (moze to zrobic po naprawie auta(zakonczona naprawa) wtedy mu przyjdzie oceń naprawę)
+
+
+Rejestracja:
+	Klient:
+		facebook
+		google
+		wałasny provider
+			(dodanie PESELU), numer telefonu adress (konfigurowalne po zalogowaniu, rejestracji) \
+			klient moze byc firma wtedy rejestruje sie jako user(emailem nr tel)  i dodaje nip a dane beda pobrane z api 
+	Warsztat rejestracja: tylko własny provder: jako firma(opcja zarejestruj jako warsztat)
+	
+	
+Klient (uzytkownik opcja naprawa na własną rekę, objawy-przyczyny (stary olej), diagnoza-czas-kilometry, zakres napraw (wymiana filtra oleju)
+		
+
+
+	
+Technologia 
+	docker
+		database: mysql
+		backend: symfony(api)
+		frontend: React 
+			template: https://coreui.io/demos/react/4.0/free/#/dashboard
+			
+		
+Baza danych:
+	tabele:
+		User: (imie, nazwisko, nr.tel, adres, email, rola)
+		Warsztat: Nazwa, nip, adres, user
+			Naprawa: auto, data, przyczyna(opis), diagnoza(), rezultatNaprawy(id)
+				Auto: VIN, marka, model, rok produkcji, wlasciciel(nullable, user), silnik, nadowzie
+					Marka: model(id), nazwa,
+					Model: marka(id), nazwa, lata produkcji?,
+					Silnik: typ, pojemnosc, model(id),
+				Diagnoza (nazwa(tag(typu diagnoza)(wiele czynnosci diagnostycznych), opis(skutek), naprawaId)
+				RezultatNaprawy (tag/nazwa(typu naprawa)(wiele czynnosci), zdjecia, opis, naprawaId)
+					TagCzynnosci (nazwa, dignoza/naprawa, opis)
