@@ -1,6 +1,10 @@
 Aplikacja Warsztat Online 
 
-Warsztat moze dodac naprawe do danego auta postawic diagne opisac co obejmowała diagnoza najpier klient podaje lub i wpisuje online
+Warsztat moze
++dodac naprawe do danego auta
++postawic diagnoze
+  +opisac co obejmowała diagnoza
+   najpierw klient podaje lub/i wpisuje online
 
 sprawdz
 	
@@ -124,3 +128,9 @@ Baza danych:
 				Diagnoza (nazwa(tag(typu diagnoza)(wiele czynnosci diagnostycznych), opis(skutek), naprawaId)
 				RezultatNaprawy (tag/nazwa(typu naprawa)(wiele czynnosci), zdjecia, opis, naprawaId)
 					TagCzynnosci (nazwa, dignoza/naprawa, opis)
+
+
+
+
+					dodacn composer install po odpaleniu contenera albo z palca 
+					i doctrine:doctrine:migrations:migrate 
