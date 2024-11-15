@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\EngineRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EngineRepository::class)]
@@ -16,32 +14,27 @@ class Engine
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $type = null;
+    private ?string $fuelType = null;
 
     #[ORM\Column(length: 255)]
     private ?string $capacity = null;
 
-    #[ORM\ManyToMany(targetEntity: Model::class, inversedBy: 'engines')]
-    private Collection $model;
-
-    public function __construct()
-    {
-        $this->model = new ArrayCollection();
-    }
+    #[ORM\Column(length: 255)]
+    private ?string $code = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getType(): ?string
+    public function getFuelType(): ?string
     {
-        return $this->type;
+        return $this->fuelType;
     }
 
-    public function setType(string $type): self
+    public function setFuelType(string $fuelType): self
     {
-        $this->type = $type;
+        $this->fuelType = $fuelType;
 
         return $this;
     }
@@ -58,26 +51,14 @@ class Engine
         return $this;
     }
 
-    /**
-     * @return Collection<int, Model>
-     */
-    public function getModel(): Collection
+    public function getCode(): ?string
     {
-        return $this->model;
+        return $this->code;
     }
 
-    public function addModel(Model $model): self
+    public function setCode(string $code): self
     {
-        if (!$this->model->contains($model)) {
-            $this->model->add($model);
-        }
-
-        return $this;
-    }
-
-    public function removeModel(Model $model): self
-    {
-        $this->model->removeElement($model);
+        $this->code = $code;
 
         return $this;
     }

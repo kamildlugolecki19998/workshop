@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\MakeRepository;
+use App\Repository\BrandRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: MakeRepository::class)]
-class Make
+#[ORM\Entity(repositoryClass: BrandRepository::class)]
+class Brand
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,7 +18,7 @@ class Make
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'make', targetEntity: Model::class)]
+    #[ORM\OneToMany(mappedBy: 'brands', targetEntity: Model::class)]
     private Collection $models;
 
     public function __construct()
@@ -44,7 +44,7 @@ class Make
     }
 
     /**
-     * @return Collection<int, Model>
+     * @return Collection<Model>
      */
     public function getModels(): Collection
     {
@@ -55,7 +55,6 @@ class Make
     {
         if (!$this->models->contains($model)) {
             $this->models->add($model);
-            $model->setMake($this);
         }
 
         return $this;
@@ -63,11 +62,8 @@ class Make
 
     public function removeModel(Model $model): self
     {
-        if ($this->models->removeElement($model)) {
-            // set the owning side to null (unless already changed)
-            if ($model->getMake() === $this) {
-                $model->setMake(null);
-            }
+        if ($this->models->contains($model)) {
+                $this->models->removeElement($model);
         }
 
         return $this;

@@ -30,20 +30,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $lastName = null;
-
-    #[ORM\Column(length: 9, nullable: true)]
-    private ?string $phone = null;
+    private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $address = null;
+    private ?string $lastName = null;
 
-    #[ORM\ManyToMany(targetEntity: Car::class, mappedBy: 'owner')]
-    private Collection $cars;
+    #[ORM\ManyToMany(targetEntity: Car::class)]
+    private Collection $vehicles;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $identifyNumber = null;
 
     public function __construct()
     {
-        $this->cars = new ArrayCollection();
+        $this->vehicles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -116,6 +116,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
     public function getLastName(): ?string
     {
         return $this->lastName;
@@ -128,53 +140,38 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPhone(): ?string
-    {
-        return $this->phone;
-    }
-
-    public function setPhone(?string $phone): self
-    {
-        $this->phone = $phone;
-
-        return $this;
-    }
-
-    public function getAddress(): ?string
-    {
-        return $this->address;
-    }
-
-    public function setAddress(string $address): self
-    {
-        $this->address = $address;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Car>
      */
-    public function getCars(): Collection
+    public function getVehicles(): Collection
     {
-        return $this->cars;
+        return $this->vehicles;
     }
 
-    public function addCar(Car $car): self
+    public function addVehicle(Car $vehicle): self
     {
-        if (!$this->cars->contains($car)) {
-            $this->cars->add($car);
-            $car->addOwner($this);
+        if (!$this->vehicles->contains($vehicle)) {
+            $this->vehicles->add($vehicle);
         }
 
         return $this;
     }
 
-    public function removeCar(Car $car): self
+    public function removeVehicle(Car $vehicle): self
     {
-        if ($this->cars->removeElement($car)) {
-            $car->removeOwner($this);
-        }
+        $this->vehicles->removeElement($vehicle);
+
+        return $this;
+    }
+
+    public function getIdentifyNumber(): ?string
+    {
+        return $this->identifyNumber;
+    }
+
+    public function setIdentifyNumber(?string $identifyNumber): self
+    {
+        $this->identifyNumber = $identifyNumber;
 
         return $this;
     }

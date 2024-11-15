@@ -18,15 +18,12 @@ class Model
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\ManyToOne(inversedBy: 'models')]
-    private ?Make $make = null;
-
-    #[ORM\ManyToMany(targetEntity: Engine::class, mappedBy: 'model')]
-    private Collection $engines;
+    #[ORM\OneToMany(mappedBy: 'models', targetEntity: SubModel::class)]
+    private Collection $subModels;
 
     public function __construct()
     {
-        $this->engines = new ArrayCollection();
+        $this->subModels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -46,40 +43,27 @@ class Model
         return $this;
     }
 
-    public function getMake(): ?Make
-    {
-        return $this->make;
-    }
-
-    public function setMake(?Make $make): self
-    {
-        $this->make = $make;
-
-        return $this;
-    }
-
     /**
-     * @return Collection<int, Engine>
+     * @return Collection<int, SubModel>
      */
-    public function getEngines(): Collection
+    public function getSubModels(): Collection
     {
-        return $this->engines;
+        return $this->subModels;
     }
 
-    public function addEngine(Engine $engine): self
+    public function addSubModel(SubModel $subModel): self
     {
-        if (!$this->engines->contains($engine)) {
-            $this->engines->add($engine);
-            $engine->addModel($this);
+        if (!$this->subModels->contains($subModel)) {
+            $this->subModels->add($subModel);
         }
 
         return $this;
     }
 
-    public function removeEngine(Engine $engine): self
+    public function removeSubModel(SubModel $subModel): self
     {
-        if ($this->engines->removeElement($engine)) {
-            $engine->removeModel($this);
+        if ($this->subModels->contains($subModel)) {
+            $this->subModels->removeElement($subModel);
         }
 
         return $this;

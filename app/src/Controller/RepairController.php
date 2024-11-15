@@ -15,6 +15,9 @@ use OpenApi\Attributes as OA;
 #[OA\Tag(name: 'Repair')]
 class RepairController extends AbstractController
 {
+
+
+    
     #[Route('/', name: 'app_repair_index', methods: ['GET'])]
     public function index(RepairRepository $repairRepository): Response
     {
@@ -27,7 +30,7 @@ class RepairController extends AbstractController
     public function new(Request $request, RepairRepository $repairRepository): Response
     {
         $repair = new Repair();
-        $form = $this->createForm(RepairType::class, $repair);
+        $form   = $this->createForm(RepairType::class, $repair);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -35,6 +38,7 @@ class RepairController extends AbstractController
 
             return $this->redirectToRoute('app_repair_index', [], Response::HTTP_SEE_OTHER);
         }
+
 
         return $this->renderForm('repair/new.html.twig', [
             'repair' => $repair,
@@ -44,7 +48,7 @@ class RepairController extends AbstractController
 
     #[Route('/{id}', name: 'app_repair_show', methods: ['GET'])]
     public function show(Repair $repair): Response
-    {  
+    {
         return $this->render('repair/show.html.twig', [
             'repair' => $repair,
         ]);
@@ -71,7 +75,7 @@ class RepairController extends AbstractController
     #[Route('/{id}', name: 'app_repair_delete', methods: ['POST'])]
     public function delete(Request $request, Repair $repair, RepairRepository $repairRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$repair->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $repair->getId(), $request->request->get('_token'))) {
             $repairRepository->remove($repair, true);
         }
 

@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\CarRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,35 +14,52 @@ class Car
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $year = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $bodyType = null;
+
     #[ORM\Column(length: 255)]
     private ?string $vin = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $make = null;
+    #[ORM\Column(length: 10)]
+    private ?string $kilometers = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $model = null;
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Engine $engine = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $releaseDate = null;
-
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'cars')]
-    private Collection $owner;
-
-    #[ORM\Column(length: 255)]
-    private ?string $carBody = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $engine = null;
-
-    public function __construct()
-    {
-        $this->owner = new ArrayCollection();
-    }
+    #[ORM\Column]
+    private array $baseCar = [];
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getYear(): ?\DateTimeInterface
+    {
+        return $this->year;
+    }
+
+    public function setYear(\DateTimeInterface $year): self
+    {
+        $this->year = $year;
+
+        return $this;
+    }
+
+    public function getBodyType(): ?string
+    {
+        return $this->bodyType;
+    }
+
+    public function setBodyType(string $bodyType): self
+    {
+        $this->bodyType = $bodyType;
+
+        return $this;
     }
 
     public function getVin(): ?string
@@ -59,86 +74,38 @@ class Car
         return $this;
     }
 
-    public function getMake(): ?string
+    public function getKilometers(): ?string
     {
-        return $this->make;
+        return $this->kilometers;
     }
 
-    public function setMake(string $make): self
+    public function setKilometers(string $kilometers): self
     {
-        $this->make = $make;
+        $this->kilometers = $kilometers;
 
         return $this;
     }
 
-    public function getModel(): ?string
-    {
-        return $this->model;
-    }
-
-    public function setModel(string $model): self
-    {
-        $this->model = $model;
-
-        return $this;
-    }
-
-    public function getReleaseDate(): ?\DateTimeInterface
-    {
-        return $this->releaseDate;
-    }
-
-    public function setReleaseDate(\DateTimeInterface $releaseDate): self
-    {
-        $this->releaseDate = $releaseDate;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, User>
-     */
-    public function getOwner(): Collection
-    {
-        return $this->owner;
-    }
-
-    public function addOwner(User $owner): self
-    {
-        if (!$this->owner->contains($owner)) {
-            $this->owner->add($owner);
-        }
-
-        return $this;
-    }
-
-    public function removeOwner(User $owner): self
-    {
-        $this->owner->removeElement($owner);
-
-        return $this;
-    }
-
-    public function getCarBody(): ?string
-    {
-        return $this->carBody;
-    }
-
-    public function setCarBody(string $carBody): self
-    {
-        $this->carBody = $carBody;
-
-        return $this;
-    }
-
-    public function getEngine(): ?string
+    public function getEngine(): ?Engine
     {
         return $this->engine;
     }
 
-    public function setEngine(string $engine): self
+    public function setEngine(Engine $engine): self
     {
         $this->engine = $engine;
+
+        return $this;
+    }
+
+    public function getBaseCar(): array
+    {
+        return $this->baseCar;
+    }
+
+    public function setBaseCar(array $baseCar): self
+    {
+        $this->baseCar = $baseCar;
 
         return $this;
     }

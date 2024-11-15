@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\BaseCar\BaseCar;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -20,12 +21,16 @@ class TestController extends AbstractFOSRestController
     ]
     public function index(ParamFetcherInterface $paramFetcher): Response
     {
-        $id = $paramFetcher->get('id');
-        // return $request->query->all();
-        return new JsonResponse($id);
-        return $this->render('test/index.html.twig', [
-            'controller_name' => 'TestController',
-        ]);
+       $baseCar = new BaseCar();
+       $baseCar->setBrandName('Audi');
+       $baseCar->setModelName('A4');
+       $baseCar->setSubModelName('B8');
+
+    $jsonBaseCar = $baseCar->serialize();
+    $againObject = $baseCar->createFromJson($jsonBaseCar);
+    
+    dd($jsonBaseCar, $againObject);
+        return new JsonResponse();
     }
 }
 # config/routes.yam
